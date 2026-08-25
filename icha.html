@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:,">
+<title>happy birthday, icha 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+<style>
+  :root {
+    --bg-deep: #0d0008;
+    --bg-dark: #1a0010;
+    --bg-mid: #2d0020;
+    --pink: #e91e8c;
+    --pink-light: #ff69b4;
+    --pink-pale: #ffb6c1;
+    --rose-gold: #c4a165;
+    --white-soft: #fff0f5;
+    --white-dim: rgba(255,240,245,0.75);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg-dark);
+    color: var(--white-soft);
+    font-family: 'Lato', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  #particle-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── FLOWER CONFETTI CANVAS ── */
+  #confetti-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 999;
+    display: none;
+  }
+
+  .petal {
+    position: fixed; top: -40px;
+    font-size: 1.2rem; pointer-events: none;
+    z-index: 1; animation: petalFall linear infinite; opacity: 0.7;
+  }
+  @keyframes petalFall {
+    0%   { transform: translateY(-40px) rotate(0deg) translateX(0); opacity: 0.7; }
+    50%  { transform: translateY(50vh) rotate(180deg) translateX(30px); opacity: 0.5; }
+    100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); opacity: 0; }
+  }
+
+  .bokeh {
+    position: fixed; border-radius: 50%;
+    background: radial-gradient(circle, rgba(233,30,140,0.18) 0%, transparent 70%);
+    pointer-events: none; z-index: 0; animation: bokehFloat ease-in-out infinite;
+  }
+  @keyframes bokehFloat {
+    0%,100% { transform: translateY(0) scale(1); opacity: 0.4; }
+    50%      { transform: translateY(-40px) scale(1.1); opacity: 0.7; }
+  }
+
+  section {
+    position: relative; z-index: 2; min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 80px 20px; overflow: hidden;
+  }
+  section::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(45,0,32,0.6) 0%, rgba(13,0,8,0.85) 100%);
+    pointer-events: none; z-index: 0;
+  }
+  section > * { position: relative; z-index: 1; }
+
+  .section-label {
+    font-family: 'Lato', sans-serif; font-size: 0.7rem; font-weight: 300;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--rose-gold); margin-bottom: 16px;
+  }
+  h1, h2, h3 { font-family: 'Playfair Display', serif; line-height: 1.2; }
+  h1 { font-size: clamp(2.8rem, 7vw, 5rem); font-weight: 600; }
+  h2 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 500; }
+
+  .subtitle {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(1rem, 2.5vw, 1.3rem); color: var(--white-dim);
+    margin-top: 14px; max-width: 520px; text-align: center; line-height: 1.7;
+  }
+
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── SECTION 1 GIFT ── */
+  #section-intro { background: linear-gradient(180deg, #0d0008 0%, #1a0010 100%); text-align: center; }
+  .gift-wrapper { display: flex; flex-direction: column; align-items: center; cursor: pointer; user-select: none; }
+  .gift-box {
+    position: relative; width: 130px; height: 120px;
+    animation: giftBounce 2s ease-in-out infinite; transition: transform 0.3s;
+  }
+  .gift-box:hover { transform: scale(1.05); }
+  @keyframes giftBounce {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-14px); }
+  }
+  .gift-body {
+    position: absolute; bottom: 0; width: 130px; height: 90px;
+    background: linear-gradient(135deg, #8b0057, #c4006a); border-radius: 8px;
+    box-shadow: 0 0 40px rgba(233,30,140,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .gift-ribbon-h { position: absolute; bottom: 35px; left: 0; right: 0; height: 18px; background: linear-gradient(135deg, #e91e8c, #ff69b4); }
+  .gift-ribbon-v { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 18px; height: 90px; background: linear-gradient(135deg, #e91e8c, #ff69b4); }
+  .gift-lid {
+    position: absolute; top: 0; width: 130px; height: 36px;
+    background: linear-gradient(135deg, #a0006a, #d4008a); border-radius: 8px 8px 0 0;
+    box-shadow: 0 -4px 20px rgba(233,30,140,0.4);
+    transition: all .8s ease, opacity .6s ease; transform-origin: top center;
+  }
+  .gift-bow { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-size: 2.5rem; line-height: 1; filter: drop-shadow(0 0 8px rgba(233,30,140,0.7)); }
+  .gift-box.opening .gift-lid { transform: rotateX(-120deg) translateY(-20px); opacity: 0; }
+  .gift-flowers { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 1.8rem; opacity: 0; transition: opacity 0.5s 0.4s; white-space: nowrap; letter-spacing: 4px; }
+  .gift-box.opening .gift-lid{
+  animation: lidFlyUp 1s ease forwards;
+}
+
+@keyframes lidFlyUp{
+  0%{
+    transform: translateY(0) rotate(0deg);
+    opacity:1;
+  }
+
+  40%{
+    transform: translateY(-60px) rotate(-8deg);
+    opacity:1;
+  }
+
+  100%{
+    transform: translateY(-180px) rotate(-20deg);
+    opacity:0;
+  }
+}
+  .tap-hint { margin-top: 30px; font-size: 0.75rem; letter-spacing: 0.3em; color: var(--rose-gold); text-transform: uppercase; animation: fadeInOut 2s ease-in-out infinite; }
+  @keyframes fadeInOut { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  /* ── SECTION 2 HERO ── */
+  #section-hero { text-align: center; background: linear-gradient(180deg, #1a0010 0%, #240018 100%); }
+  .hero-flower { font-size: 3.5rem; display: block; margin: 28px auto; animation: heroFlower 3s ease-in-out infinite; filter: drop-shadow(0 0 20px rgba(233,30,140,0.7)); }
+  @keyframes heroFlower { 0%,100% { transform: scale(1) rotate(-5deg); } 50% { transform: scale(1.12) rotate(5deg); } }
+  .scroll-hint { margin-top: 50px; font-size: 0.7rem; letter-spacing: 0.35em; color: var(--rose-gold); text-transform: uppercase; animation: scrollPulse 2s ease-in-out infinite; }
+  @keyframes scrollPulse { 0%,100% { opacity: 0.5; transform: translateY(0); } 50% { opacity: 1; transform: translateY(6px); } }
+
+  /* ── SECTION 3 GALLERY ── */
+  #section-gallery { background: linear-gradient(180deg, #240018 0%, #2d0020 100%); text-align: center; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 640px; width: 100%; margin-top: 40px; }
+  .gallery-item { position: relative; overflow: hidden; border-radius: 12px; aspect-ratio: 3/4; border: 1px solid rgba(233,30,140,0.2); cursor: pointer; }
+  .gallery-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(1); transition: filter 0.5s, transform 0.5s;
+    display: block;
+  }
+  .gallery-item:hover img { filter: grayscale(0); transform: scale(1.04); }
+  .gallery-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #3d0028, #200015);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 3rem;
+    filter: grayscale(1); transition: filter 0.5s, transform 0.5s;
+  }
+  .gallery-item:hover .gallery-placeholder { filter: grayscale(0); transform: scale(1.04); }
+  .gallery-caption {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 12px;
+    background: linear-gradient(transparent, rgba(13,0,8,0.85));
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 1.1rem; color: var(--pink-pale); text-align: center;
+  }
+  .gallery-overlay { position: absolute; inset: 0; background: rgba(233,30,140,0.08); opacity: 0; transition: opacity 0.4s; border-radius: 12px; }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+  /* ── SECTION 4 CARDS ── */
+  #section-reasons { background: linear-gradient(180deg, #2d0020 0%, #200018 100%); text-align: center; }
+  .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 880px; width: 100%; margin-top: 48px; }
+  @media (max-width: 700px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 440px) { .cards-grid { grid-template-columns: 1fr; } }
+  .love-card { background: linear-gradient(135deg, rgba(45,0,32,0.9), rgba(30,0,22,0.95)); border: 1px solid rgba(233,30,140,0.2); border-radius: 16px; padding: 28px 20px; text-align: center; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; cursor: default; }
+  .love-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(233,30,140,0.35), 0 0 0 1px rgba(233,30,140,0.4); border-color: rgba(233,30,140,0.5); }
+  .love-card .card-emoji { font-size: 2.4rem; display: block; margin-bottom: 14px; }
+  .love-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: var(--pink-light); margin-bottom: 10px; }
+  .love-card p { font-size: 0.82rem; font-weight: 300; color: var(--white-dim); line-height: 1.6; }
+
+  /* ── SECTION 5 GARDEN ── */
+  #section-garden { background: linear-gradient(180deg, #200018 0%, #1a0010 100%); text-align: center; }
+  .garden-hint { font-size: 0.75rem; letter-spacing: 0.2em; color: var(--rose-gold); margin-top: 12px; margin-bottom: 48px; }
+  .flower-row { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+  .flower-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; transition: transform 0.3s; }
+  .flower-item:hover { transform: translateY(-10px); }
+  .flower-emoji { font-size: 2.5rem; display: block; filter: drop-shadow(0 0 8px rgba(233,30,140,0.4)); transition: filter 0.3s; }
+  .flower-item:hover .flower-emoji { filter: drop-shadow(0 0 18px rgba(233,30,140,0.9)); }
+  .flower-stem { width: 3px; height: 60px; background: linear-gradient(to bottom, #2d7a2d, #1a4a1a); border-radius: 2px; margin-top: -4px; }
+  .flower-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-10px); background: linear-gradient(135deg, rgba(45,0,32,0.98), rgba(20,0,15,0.98)); border: 1px solid rgba(233,30,140,0.4); border-radius: 10px; padding: 12px 16px; width: 160px; text-align: center; pointer-events: none; opacity: 0; transition: opacity 0.3s, transform 0.3s; z-index: 10; backdrop-filter: blur(6px); }
+  .flower-item:hover .flower-tooltip { opacity: 1; transform: translateX(-50%) translateY(-20px); }
+  .flower-tooltip strong { display: block; color: var(--pink-light); font-family: 'Playfair Display', serif; font-size: 0.9rem; margin-bottom: 4px; }
+  .flower-tooltip span { font-size: 0.72rem; color: var(--white-dim); line-height: 1.5; }
+
+  /* ── SECTION 6 LETTER ── */
+  #section-letter { background: linear-gradient(180deg, #1a0010 0%, #240018 100%); text-align: center; }
+  .letter-card { max-width: 620px; width: 100%; background: linear-gradient(135deg, rgba(40,0,28,0.95), rgba(20,0,14,0.98)); border: 1px solid rgba(233,30,140,0.25); border-radius: 20px; padding: 56px 48px; position: relative; overflow: hidden; }
+  @media (max-width: 480px) { .letter-card { padding: 40px 24px; } }
+  .letter-card::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(233,30,140,0.12) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+  .letter-card::after { content: ''; position: absolute; bottom: -60px; left: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(196,161,101,0.1) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+  .letter-flowers { font-size: 1.8rem; display: block; margin-bottom: 24px; letter-spacing: 6px; }
+  .letter-label { font-size: 0.65rem; letter-spacing: 0.4em; color: var(--rose-gold); text-transform: uppercase; margin-bottom: 20px; display: block; }
+  .letter-card h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--white-soft); margin-bottom: 28px; }
+  .letter-poem { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(0.95rem, 2vw, 1.1rem); color: var(--white-dim); line-height: 1.9; margin-bottom: 32px; }
+  .letter-sign { font-family: 'Playfair Display', serif; font-style: italic; color: var(--pink-light); font-size: 1rem; }
+
+  /* ── SECTION 7 CLOSING ── */
+  #section-closing { background: linear-gradient(180deg, #240018 0%, #0d0008 100%); text-align: center; }
+  .closing-flowers { font-size: 2rem; letter-spacing: 8px; margin-bottom: 28px; display: block; }
+  .closing-para { max-width: 500px; font-size: 1rem; font-weight: 300; color: var(--white-dim); line-height: 1.9; margin-top: 20px; font-style: italic; font-family: 'Playfair Display', serif; }
+  .made-with-love { margin-top: 48px; font-size: 0.75rem; letter-spacing: 0.25em; color: var(--rose-gold); text-transform: uppercase; }
+  .heart-pulse { display: inline-block; font-size: 2.5rem; margin-top: 20px; animation: heartPulse 1.4s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(233,30,140,0.8)); }
+  @keyframes heartPulse { 0%,100% { transform: scale(1); } 15% { transform: scale(1.25); } 30% { transform: scale(1); } 45% { transform: scale(1.15); } 60% { transform: scale(1); } }
+
+  /* ── MUSIC PLAYER ── */
+  #music-player {
+    position: fixed; bottom: 20px; left: 20px; z-index: 100;
+    background: linear-gradient(135deg, rgba(30,0,22,0.95), rgba(15,0,11,0.98));
+    border: 1px solid rgba(233,30,140,0.3); border-radius: 16px;
+    padding: 14px 16px; display: flex; align-items: center; gap: 14px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(233,30,140,0.1);
+    width: 290px; transition: transform 0.3s;
+  }
+  #music-player:hover { transform: translateY(-2px); }
+  .player-cover {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: linear-gradient(135deg, #8b0057, #c4006a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; flex-shrink: 0;
+    animation: coverSpin 8s linear infinite paused;
+    overflow: hidden;
+  }
+  .player-cover img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+  .player-cover.playing { animation-play-state: running; }
+  @keyframes coverSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .player-info { flex: 1; min-width: 0; }
+  .player-title { font-size: 0.8rem; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--white-soft); margin-bottom: 4px; }
+  .player-artist { font-size: 0.68rem; color: var(--rose-gold); font-weight: 300; }
+  .player-progress { height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 8px; position: relative; cursor: pointer; }
+  .player-bar { height: 100%; background: linear-gradient(90deg, var(--pink), var(--pink-light)); border-radius: 2px; width: 0%; transition: width 0.5s linear; }
+  .player-controls { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+  .ctrl-btn { background: none; border: none; color: var(--pink-light); cursor: pointer; font-size: 0.85rem; padding: 4px; transition: color 0.2s, transform 0.2s; line-height: 1; }
+  .ctrl-btn:hover { color: #fff; transform: scale(1.2); }
+  .ctrl-btn.play-btn { width: 30px; height: 30px; background: linear-gradient(135deg, var(--pink), #c4006a); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: white; box-shadow: 0 0 12px rgba(233,30,140,0.5); }
+  .player-loading { font-size: 0.6rem; color: rgba(233,30,140,0.6); margin-top: 2px; min-height: 12px; }
+
+  .ornament { color: var(--rose-gold); font-size: 1.2rem; letter-spacing: 10px; margin: 6px 0 24px; display: block; opacity: 0.6; }
+  .gradient-text { background: linear-gradient(135deg, #fff0f5, #e91e8c, #c4a165); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  #transition-overlay { position: fixed; inset: 0; z-index: 200; pointer-events: none; background: radial-gradient(circle at center, rgba(233,30,140,0.3), transparent 70%); opacity: 0; transition: opacity 1s; }
+  #transition-overlay.flash { opacity: 1; }
+  .ctrl-btn iconify-icon{
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-btn iconify-icon{
+  font-size: 18px;
+}
+
+.ctrl-btn{
+  transition: all .25s ease;
+}
+
+.ctrl-btn:hover{
+  transform: scale(1.15);
+}
+.gift-lid-ribbon{
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:18px;
+  height:100%;
+  background:linear-gradient(
+    135deg,
+    #e91e8c,
+    #ff69b4
+  );
+  z-index:1;
+}
+
+.gift-bow{
+  z-index:2;
+}
+.gift-lid::after{
+  content:'';
+  position:absolute;
+  left:0;
+  top:50%;
+  width:100%;
+  height:8px;
+  transform:translateY(-50%);
+  background:rgba(255,255,255,0.15);
+}
+.gift-bow{
+  position:absolute;
+  top:-28px;
+  left:50%;
+  transform:translateX(-50%);
+  color:#ff69b4;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.gift-bow iconify-icon{
+  font-size:58px;
+  filter:
+    drop-shadow(0 0 10px rgba(233,30,140,.8))
+    drop-shadow(0 0 25px rgba(233,30,140,.4));
+}
+.flower-item{
+  animation: flowerSway 4s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.flower-item:nth-child(2){
+  animation-delay: .5s;
+}
+
+.flower-item:nth-child(3){
+  animation-delay: 1s;
+}
+
+.flower-item:nth-child(4){
+  animation-delay: 1.5s;
+}
+
+.flower-item:nth-child(5){
+  animation-delay: 2s;
+}
+
+.flower-item:nth-child(6){
+  animation-delay: 2.5s;
+}
+
+@keyframes flowerSway{
+  0%{
+    transform: rotate(-3deg);
+  }
+
+  50%{
+    transform: rotate(3deg);
+  }
+
+  100%{
+    transform: rotate(-3deg);
+  }
+}
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+<canvas id="confetti-canvas"></canvas>
+<div id="transition-overlay"></div>
+
+<!-- ═══════════════════════ SECTION 1 — GIFT ═══════════════════════ -->
+<section id="section-intro">
+  <div class="gift-wrapper" id="gift-wrapper" onclick="openGift()">
+    <div class="gift-box" id="gift-box">
+      <div class="gift-flowers"></div>
+      <div class="gift-lid">
+  <div class="gift-lid-ribbon"></div>
+  <div class="gift-bow">
+  <iconify-icon icon="fluent-emoji-high-contrast:ribbon"></iconify-icon>
+</div>
+</div>
+      <div class="gift-body">
+        <div class="gift-ribbon-h"></div>
+        <div class="gift-ribbon-v"></div>
+      </div>
+    </div>
+    <div class="tap-hint" id="tap-hint">tap to open </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SECTION 2 — HERO ════════════════════════ -->
+<section id="section-hero">
+  <div class="reveal">
+    <span class="section-label">a love letter in bloom</span>
+    <span class="ornament"></span>
+  </div>
+  <div class="reveal" style="transition-delay:0.15s; text-align:center;">
+    <h1 class="gradient-text">happy birthday<br>ichanya bimbimm</h1>
+  </div>
+  <div class="reveal" style="transition-delay:0.3s;">
+    <p class="subtitle">every petal holds a whisper of how much you mean to me</p>
+  </div>
+  <div class="reveal" style="transition-delay:0.45s;">
+    <span class="hero-flower">🌹</span>
+  </div>
+  <div class="reveal" style="transition-delay:0.6s;">
+    <span class="scroll-hint">scroll to discover </span>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SECTION 3 — GALLERY ═════════════════════ -->
+<section id="section-gallery">
+  <div class="reveal">
+    <span class="section-label">captured in time</span>
+    <span class="ornament"></span>
+    <h2 style="text-align:center;" class="gradient-text">your beautiful <br>birthday moments</h2>
+  </div>
+  <div class="gallery-grid reveal" style="transition-delay:0.2s;">
+    <div class="gallery-item">
+      <img src="g1.jpg" alt="foto 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="gallery-placeholder" style="display:none;"><span style="font-size:3rem">🌸</span><span style="font-size:0.65rem;color:rgba(255,240,245,0.35);margin-top:8px;letter-spacing:0.12em;">foto1.jpg</span></div>
+      <div class="gallery-overlay"></div>
+      <div class="gallery-caption">you</div>
+    </div>
+    <div class="gallery-item">
+      <img src="g2.jpg" alt="foto 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="gallery-placeholder" style="display:none;"><span style="font-size:3rem">🌹</span><span style="font-size:0.65rem;color:rgba(255,240,245,0.35);margin-top:8px;letter-spacing:0.12em;">foto2.jpg</span></div>
+      <div class="gallery-overlay"></div>
+      <div class="gallery-caption">are</div>
+    </div>
+    <div class="gallery-item">
+      <img src="g4.jpg" alt="foto 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="gallery-placeholder" style="display:none;"><span style="font-size:3rem">🌺</span><span style="font-size:0.65rem;color:rgba(255,240,245,0.35);margin-top:8px;letter-spacing:0.12em;">foto3.jpg</span></div>
+      <div class="gallery-overlay"></div>
+      <div class="gallery-caption">so</div>
+    </div>
+    <div class="gallery-item">
+      <img src="g5.jpg" alt="foto 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="gallery-placeholder" style="display:none;"><span style="font-size:3rem">🌷</span><span style="font-size:0.65rem;color:rgba(255,240,245,0.35);margin-top:8px;letter-spacing:0.12em;">foto4.jpg</span></div>
+      <div class="gallery-overlay"></div>
+      <div class="gallery-caption">beautiful</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SECTION 4 — REASONS ═════════════════════ -->
+<section id="section-reasons">
+  <div class="reveal" style="text-align:center;">
+    <span class="section-label">reasons i love you</span>
+    <span class="ornament"></span>
+    <h2 class="gradient-text">written in every petal</h2>
+  </div>
+  <div class="cards-grid reveal" style="transition-delay:0.2s;">
+    <div class="love-card"><span class="card-emoji">🌹</span><h3>your smile</h3><p>that smile of yours could light up the darkest night and melt the coldest winter.</p></div>
+    <div class="love-card"><span class="card-emoji">✨</span><h3>your soul</h3><p>your soul shines with a quiet radiance.</p></div>
+    <div class="love-card"><span class="card-emoji">🌸</span><h3>your kindness</h3><p>the gentle way you care for others makes this world infinitely more beautiful.</p></div>
+    <div class="love-card"><span class="card-emoji">🌺</span><h3>your laughter</h3><p>your laughter is the most beautiful sound — it's home to me, wherever we are.</p></div>
+    <div class="love-card"><span class="card-emoji">💐</span><h3>your strength</h3><p>you face the storms with grace and rise with beauty, brighter than before.</p></div>
+    <div class="love-card"><span class="card-emoji">💖</span><h3>simply you</h3><p>every part of you  imperfect, real, and wonderful  is exactly who I choose.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SECTION 5 — GARDEN ══════════════════════ -->
+<section id="section-garden">
+  <div class="reveal" style="text-align:center;">
+    <span class="section-label">our secret garden</span>
+    <span class="ornament"></span>
+    <h2 class="gradient-text">a garden grown<br>just for you</h2>
+    <p class="garden-hint">hover each flower to discover its meaning </p>
+  </div>
+  <div class="flower-row reveal" style="transition-delay:0.25s;">
+    <div class="flower-item">
+      <div class="flower-tooltip"><strong>red rose 🌹</strong><span>deep love & undying devotion. you are my greatest passion.</span></div>
+      <span class="flower-emoji">🌹</span><div class="flower-stem"></div>
+    </div>
+    <div class="flower-item">
+      <div class="flower-tooltip"><strong>cherry blossom 🌸</strong><span>fleeting beauty & new beginnings. every day with you is a gift.</span></div>
+      <span class="flower-emoji">🌸</span><div class="flower-stem"></div>
+    </div>
+    <div class="flower-item">
+      <div class="flower-tooltip"><strong>lavender 🪻</strong><span>a symbol of peace, tranquility and sincere love</span></div>
+      <span class="flower-emoji">🪻</span><div class="flower-stem"></div>
+    </div>
+    <div class="flower-item">
+      <div class="flower-tooltip"><strong>hibiscus 🌺</strong><span>rare beauty & delicate charm. there is no one quite like you.</span></div>
+      <span class="flower-emoji">🌺</span><div class="flower-stem"></div>
+    </div>
+    <div class="flower-item">
+      <div class="flower-tooltip"><strong>sunflower 🌻</strong><span>adoration & loyalty. like the sun, i always turn toward you.</span></div>
+      <span class="flower-emoji">🌻</span><div class="flower-stem"></div>
+    </div>
+    <div class="flower-item">
+      <div class="flower-tooltip"><strong>tulip 🌷</strong><span>perfect love & declaration of the heart. i am yours, completely.</span></div>
+      <span class="flower-emoji">🌷</span><div class="flower-stem"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SECTION 6 — LETTER ══════════════════════ -->
+<section id="section-letter">
+  <div class="letter-card reveal">
+    <span class="letter-flowers">🌸 🌸 🌸</span>
+    <span class="letter-label">dari hati bimbim</span>
+    <h2>selamat ulang tahun<br>ke-19, ichaaa 🎂</h2>
+    <p class="letter-poem">
+      selamattt ulang tahunnnn ichaaaa sayangggg 🥺❤️ maaf yaaa bimbimm baru ngucapinnyaa sekaranggg, padahall ulang tahun ichaa udah lewat darii tanggal 27 july kemarinnn 😭 bimbimm bener-bener minta maaf yaaa sayanggg, bukan karena bimbimm lupa sama ichaa atau nda peduli sama ichaa, tapii bimbimm tetep pengen ngucapin dan ngerayain hari spesial ichaa walaupun telattt. yang pentingg doa dan sayang bimbimm buat ichaa nda pernah telattt ❤️
+
+happy birthdayyy yang ke 19 tahunnnn ichaaaa 🥺❤️ akhirnyaaa ichaa sekarang udah 19 tahun yaaa sayanggg. nda kerasa bangettt waktu jalan cepettt, sekarang ichaa udah 19 tahun. bimbimm doain semogaa di umur ichaa yang baru ini ichaa selalu dikasih kesehatan, panjang umur, dimudahkan semua urusannya, dilancarkan rezekinya, dan semogaa semuaa yang ichaa inginkan satu-satu bisa tercapaiii. semogaa tahun ini jauh lebih baik dari tahun-tahun sebelumnyaaa, semogaa lebih banyak hal baik yang dateng ke ichaaa, lebih banyak kebahagiaan, lebih banyak senyum, dan semogaa ichaa selalu dikelilingi orang-orang yang bener-bener sayang sama ichaa ❤️
+
+bimbimm jugaa berharap di umur 19 ini ichaa bisa jadi versi ichaa yang lebih baik lagii, tapii bimbimm nda mauu ichaa berubah jadi orang lain. bimbimm tetep sukaa ichaa yang apa adanyaa, ichaa yang kadang manjaaa, kadang ngambekkk, kadang lucuuu, kadang bikin bimbimm bingunggg hehe, tapi justru itu yang bikin ichaa jadi ichaa yang bimbimm sayangg. jadii jangan pernah ngerasa ichaa nda cukup baik yaaa sayanggg, karena menurut bimbimm ichaa tetap berharga dan punya tempat sendiri di hati bimbimm 🥺❤️
+
+di umur yang ke 19 ini bimbimm harapp ichaa bisa lebih sayang sama diri sendiri, jangan terlalu sering mikirin orang lain sampai lupa sama diri ichaa sendiri. kalau capekk istirahattt, kalau sedihh ceritaaa, kalau ada masalah jangan dipendem sendirian yaaa. bimbimm pengen kalau ichaa lagi susah atau lagi ngerasa nda baik-baik ajaa, ichaa inget kalau ada bimbimm yang bisa ichaa ceritain. bimbimm mungkin nda selalu bisaa ngasih solusi yang paling bagus, tapi bimbimm bakal selalu dengerin ichaa semampu bimbimm.
+
+bimbimm juga mauu bilang makasihhh yaaa ichaaa, makasihhh udah pernah hadir di hidup bimbimm, makasihhh udah ngasih banyak cerita, banyak kenangan, banyak momen yang bikin bimbimm senenggg. walaupun kitaa kadang ada masalahh, kadang salah paham, kadang ada hal yang bikin kitaa kesel satu sama lain, bimbimm tetep bersyukur bisa kenal dan deket sama ichaaa. bimbimm berharap semua yang pernah kitaa lewatin bisa jadi sesuatu yang baik buat kitaa, bukan malah jadi alasan buat saling ninggalin.
+
+bimbimm nda tauu kedepannya bakal kayak gimanaa, tapii bimbimm berharap ichaa selalu bahagiaaa. kalau boleh jujurrr, bimbimm pengen bangettt masih bisa ngucapin ulang tahun ichaa di tahun-tahun berikutnyaaa, pengen masih bisa nemenin ichaa ngelewatin umur 20, 21, 22 dan seterusnyaaa hehe. bimbimm pengen lihat ichaa tumbuh, lihat ichaa berhasil mencapai impian-impian ichaa, dan kalau bisaa bimbimm pengen tetap ada di samping ichaa saat semua itu terjadiii 🥺❤️
+
+bimbimm jugaa punya doa khusus buat ichaaa di umur 19 iniii 🥺❤️ semogaaa suatu hari nanti ichaaa bisaa nikah samaa bimbimmmm, aminnn yaa allahhh 🤲🏻🥺❤️ bimbimm pengen bangettt kalau memang kitaa sama-sama masih saling sayanggg, masih saling percaya, dan masih sama-sama mauu, semogaaa akhirnyaa kitaa bisaa sampai ke tahap itu. bimbimm pengen suatu hari nanti kitaa bisaa sampai di titik dimana semua yang kitaa lewatin sekarang jadi cerita yang kitaa inget sambil senyum, terus bilang "ternyataaa kitaa bisaa yaaa sampai sejauh ini." 🥺❤️
+
+bimbimm pengen ichaaa tetap samaa bimbimm selamanyaaa, jangan ninggalin bimbimm lagii yaaa sayanggg. ingettt janji ichaa ke bimbimm, dan bimbimm jugaa masih ingettt janji bimbimm ke ichaaa. bimbimm nda mauu janji itu cuma jadi kata-kata ajaa, bimbimm pengen kitaa sama-sama buktiin dan jagaa janji itu sebisa kitaa. bimbimm bakal terus berusaha nepatin janji bimbimm ke ichaaa, jadii ichaa jugaa jangan ingkari janji ichaa ke bimbimm yaaa 🥺❤️
+
+bimbimm nda tauu nanti kedepannya kitaa bakal kayak gimanaa, tapii bimbimm berharap bangettt nama ichaa masih ada di samping nama bimbimm. semogaaa kitaa bisaa terus saling nemenin, saling jagaa, saling ngerti, dan kalau ada masalah jangan langsung memilih buat pergi. kalau ada yang salahh, kitaa omongin baik-baik, kalau ada yang sakit hatii kitaa saling minta maaf, dan kalau ada masalahh kitaa hadapin bareng-bareng. bimbimm pengen kitaa sama-sama belajar jadi lebih baik, bukan saling ninggalin setiap kali keadaan lagi nda sesuai sama yang kitaa mau.
+
+dan semogaaa kalau memang allah ngizinin, suatu hari nanti bimbimm bisaa bilang ke ichaaa, "akhirnyaaa kitaa sampai juga yaaa, setelah semua yang kitaa lewatin." aminnn paling kencenggg 🤲🏻🥺❤️ bimbimm pengen bangettt bisaa nemenin ichaa sampai tua nanti, kalau memang itu yang allah takdirkan buat kitaa. bimbimm pengen lihat ichaa tumbuh, berhasil, bahagiaaa, dan kalau bisaa bimbimm pengen jadi orang yang masih ada di samping ichaa saat semua impian ichaa satu-satu tercapaiii.
+
+jadiii sekali lagiii, happy birthdayyy ichaaaaa sayangggg, happy 19th birthdayyyy 🥺🎂❤️ maaf bangettt ucapan bimbimm telattt, tapii bimbimm harap ichaa tetep seneng baca ini yaaa. semogaa semua doa baik yang orang-orang kasih ke ichaa di ulang tahun ichaa dikabulkannn, semogaa langkah ichaa selalu dimudahkan, semogaa hati ichaa selalu tenanggg, semogaa senyum ichaa selalu ada, dan semogaa ichaa selalu jadi orang yang bahagiaaa.
+
+jangan lupa senyum yaaa ichaaa, karena bimbimm sukaa banget liat ichaa senyummm hehe. sekali lagi happy birthdayyyy ichaaaaa, selamat memasuki umur 19 tahun sayangggg 🥺❤️ semogaa umur baru ini bawa banyak hal baik buat ichaaa. semogaaa di umur 19 ini ichaa makin dewasa, makin kuat, makin bahagiaaa, dan semogaaa apa yang ichaa semogakan selama ini bisaa satu-satu jadi kenyataannn.
+
+bimbimm sayanggg banget samaa ichaaa, dan sekali lagi bimbimm minta maaf karena ucapan ini datengnya telattt. tapii percayaaa, sayang bimbimm ke ichaa nda pernah telattt ❤️ bimbimm cuma pengen ichaa selalu bahagiaaa dan semogaa bimbimm masih boleh jadi salah satu orang yang nemenin kebahagiaan ichaaa, bukan cuma sekarang tapiii sampai nanti kalau allah masih ngasih kitaa kesempatan buat terus bersamaaa 🥺❤️
+
+happy birthdayyyy ichaaaaanyaaa bimbimmmmm 🎂🥺❤️ semogaaa panjang umur, sehat selalu, dimudahkan rezekinya, dimudahkan semua urusannya, tercapai semua cita-citanya, dan semogaaa doa bimbimm yang satu ini juga dikabulkannn, semogaaa suatu hari nanti ichaaa beneran jadi pasangan hidupnya bimbimmmm, aminnn yaa allahhh 🤲🏻❤️
+
+loveee uuuu moreeeee ichaaaa, sayanggg bangettt samaa ichaaaaanyaaa bimbimmmmm ❤️🥺 jangan pergi dari bimbimm yaaa, ingettt janji ichaa ke bimbimm, karena bimbimm jugaa masih ingettt janji bimbimm ke ichaaa. semogaaa kitaa bisaa terus sama-sama, saling jagaa, saling sayanggg, dan kalau memang allah mengizinkan, semogaaa sampai selamanyaaa ❤️🥺
+    </p>
+    <p class="letter-sign"> selalu sayang, bimbimm 🌹</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SECTION 7 — CLOSING ═════════════════════ -->
+<section id="section-closing">
+  <div class="reveal" style="text-align:center;">
+    <span class="closing-flowers">🪻💐🌹🌼🌷</span>
+    <span class="section-label">always &amp; forever</span>
+    <span class="ornament"></span>
+    <h2 class="gradient-text">you are loved<br>beyond words</h2>
+    <p class="closing-para">
+      no poem is long enough, no garden wide enough, no sky vast enough to hold the love i carry for you. you are not just someone i love  you are someone i choose, over and over, in every universe that ever was or will be.
+    </p>
+    <p class="made-with-love" style="margin-top:40px;">Made with love, just for you 🌸</p>
+    <span class="heart-pulse">💗</span>
+  </div>
+</section>
+
+<!-- ═══════════════════════ MUSIC PLAYER ════════════════════════════ -->
+<audio id="audio-player" preload="auto"></audio>
+
+<div id="music-player">
+  <div class="player-cover" id="player-cover">🌹</div>
+  <div class="player-info">
+    <div class="player-title" id="player-title">loading...</div>
+    <div class="player-artist" id="player-artist">♪</div>
+    <div class="player-progress" id="progress-bar-wrap">
+      <div class="player-bar" id="player-bar"></div>
+    </div>
+    <div class="player-loading" id="player-loading"></div>
+  </div>
+  <div class="player-controls">
+  <button class="ctrl-btn" onclick="prevTrack()" title="Previous">
+    <iconify-icon icon="solar:skip-previous-bold"></iconify-icon>
+  </button>
+
+  <button class="ctrl-btn play-btn" id="play-btn" onclick="togglePlay()" title="Play">
+    <iconify-icon icon="solar:play-bold" id="play-icon"></iconify-icon>
+  </button>
+
+  <button class="ctrl-btn" onclick="nextTrack()" title="Next">
+    <iconify-icon icon="solar:skip-next-bold"></iconify-icon>
+  </button>
+</div>
+</div>
+
+<script>
+/* ══════════════════════════════════
+   PARTICLES
+══════════════════════════════════ */
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+class Particle {
+  constructor() {
+    this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+    this.r = Math.random() * 2.5 + 0.5; this.vx = (Math.random() - 0.5) * 0.4; this.vy = (Math.random() - 0.5) * 0.4;
+    this.alpha = Math.random() * 0.6 + 0.1; this.alphaDir = (Math.random() - 0.5) * 0.008;
+    const colors = ['rgba(233,30,140,','rgba(255,105,180,','rgba(196,161,101,','rgba(255,182,193,'];
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy; this.alpha += this.alphaDir;
+    if (this.alpha <= 0.05 || this.alpha >= 0.7) this.alphaDir *= -1;
+    if (this.x < 0) this.x = canvas.width; if (this.x > canvas.width) this.x = 0;
+    if (this.y < 0) this.y = canvas.height; if (this.y > canvas.height) this.y = 0;
+  }
+  draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); ctx.fillStyle = this.color + this.alpha + ')'; ctx.fill(); }
+}
+for (let i = 0; i < 120; i++) particles.push(new Particle());
+function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
+animateParticles();
+
+/* ══════════════════════════════════
+   PETALS (background ambient)
+══════════════════════════════════ */
+const petalEmojis = ['🌸', '🌹', '🌷', '🌺'];
+function createPetal() {
+  const p = document.createElement('div'); p.className = 'petal';
+  p.textContent = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+  p.style.left = Math.random() * 100 + 'vw';
+  p.style.fontSize = (Math.random() * 0.8 + 0.7) + 'rem';
+  p.style.animationDuration = (Math.random() * 8 + 7) + 's';
+  p.style.animationDelay = (Math.random() * 5) + 's';
+  document.body.appendChild(p); setTimeout(() => p.remove(), 16000);
+}
+setInterval(createPetal, 700);
+
+/* ══════════════════════════════════
+   BOKEH
+══════════════════════════════════ */
+for (let i = 0; i < 8; i++) {
+  const b = document.createElement('div'); b.className = 'bokeh';
+  const size = Math.random() * 200 + 80;
+  b.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}vw;top:${Math.random()*100}vh;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*6}s;opacity:${Math.random()*0.4+0.1};`;
+  document.body.appendChild(b);
+}
+
+/* ══════════════════════════════════
+   FLOWER CONFETTI (canvas-based)
+   Muncul saat gift dibuka, lalu hilang sendiri
+══════════════════════════════════ */
+const confettiCanvas = document.getElementById('confetti-canvas');
+const cCtx = confettiCanvas.getContext('2d');
+let confettiPieces = [];
+
+function resizeConfetti() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+resizeConfetti();
+window.addEventListener('resize', resizeConfetti);
+
+// Flower shapes as tiny SVG-style paths drawn on canvas
+const flowerColors = [
+  '#e91e8c', '#ff69b4', '#ffb6c1', '#c4a165',
+  '#ff1493', '#ff85c8', '#ffd1e8', '#e8a0bf',
+  '#ff6eb4', '#ffaad4'
+];
+
+class ConfettiFlower {
+  constructor() { this.reset(true); }
+  /**
+   * @param {boolean} fromTop
+   */
+  reset(fromTop) {
+    this.x = Math.random() * confettiCanvas.width;
+    this.y = fromTop ? (Math.random() * -200 - 20) : (Math.random() * confettiCanvas.height);
+    this.size = Math.random() * 10 + 5;       // 5–15px
+    this.vx = (Math.random() - 0.5) * 2.5;
+    this.vy = Math.random() * 2 + 1;           // drift down
+    this.vRotate = (Math.random() - 0.5) * 0.12;
+    this.rotation = Math.random() * Math.PI * 2;
+    this.alpha = 1;
+    this.fadeDelay = Math.random() * 180 + 60; // frames before fading
+    this.age = 0;
+    this.color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+    this.petals = Math.floor(Math.random() * 3) + 4; // 4–6 petals
+    this.type = Math.random() < 0.5 ? 'flower' : 'petal'; // petal = small oval
+  }
+  /**
+   * @param {CanvasRenderingContext2D} ctx
+   */
+  drawFlower(ctx) {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.globalAlpha = this.alpha;
+    if (this.type === 'petal') {
+      // Simple oval petal
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.size * 0.4, this.size, 0, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    } else {
+      // Multi-petal flower
+      const n = this.petals;
+      const r = this.size;
+      for (let i = 0; i < n; i++) {
+        const angle = (i / n) * Math.PI * 2;
+        ctx.save();
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.ellipse(0, r * 0.5, r * 0.28, r * 0.52, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+      }
+      // center dot
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.22, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff0f5';
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+  update() {
+    this.x += this.vx;
+    this.vy += 0.04; // slight gravity
+    this.y += this.vy;
+    this.rotation += this.vRotate;
+    this.age++;
+    if (this.age > this.fadeDelay) {
+      this.alpha -= 0.018;
+    }
+  }
+  isDead() { return this.alpha <= 0 || this.y > confettiCanvas.height + 50; }
+}
+
+function launchConfetti() {
+  confettiCanvas.style.display = 'block';
+  confettiPieces = [];
+  // Spawn 200 flowers instantly in a burst from center
+  for (let i = 0; i < 200; i++) {
+    const f = new ConfettiFlower();
+    // Start from gift position (center-ish)
+    f.x = confettiCanvas.width * 0.5 + (Math.random() - 0.5) * 60;
+    f.y = confettiCanvas.height * 0.45 + (Math.random() - 0.5) * 40;
+    // Burst outward + upward
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 12 + 3;
+    f.vx = Math.cos(angle) * speed;
+    f.vy = Math.sin(angle) * speed - Math.random() * 8; // bias upward
+    f.fadeDelay = Math.random() * 100 + 80;
+    f.age = 0;
+    f.alpha = 1;
+    confettiPieces.push(f);
+  }
+  // Keep adding a stream for 3 seconds
+  let streamCount = 0;
+  const streamInterval = setInterval(() => {
+    for (let i = 0; i < 8; i++) {
+      const f = new ConfettiFlower();
+      f.x = confettiCanvas.width * 0.5 + (Math.random() - 0.5) * 80;
+      f.y = confettiCanvas.height * 0.45;
+      const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI;
+      const speed = Math.random() * 10 + 4;
+      f.vx = Math.cos(angle) * speed;
+      f.vy = Math.sin(angle) * speed;
+      f.fadeDelay = Math.random() * 80 + 60;
+      confettiPieces.push(f);
+    }
+    streamCount++;
+    if (streamCount > 30) clearInterval(streamInterval);
+  }, 100);
+
+  animateConfetti();
+}
+
+function animateConfetti() {
+  cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  confettiPieces = confettiPieces.filter(f => !f.isDead());
+  confettiPieces.forEach(f => { f.update(); f.drawFlower(cCtx); });
+  if (confettiPieces.length > 0) {
+    requestAnimationFrame(animateConfetti);
+  } else {
+    // All done — hide canvas
+    confettiCanvas.style.display = 'none';
+  }
+}
+
+/* ══════════════════════════════════
+   GIFT BOX
+══════════════════════════════════ */
+const burstStyle = document.createElement('style');
+burstStyle.textContent = `@keyframes burstOut { 0% { transform: translate(-50%,-50%) scale(0); opacity:1; } 100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.5); opacity:0; } }`;
+document.head.appendChild(burstStyle);
+
+let giftOpened = false;
+function openGift() {
+  if (giftOpened) return; giftOpened = true;
+  document.getElementById('gift-box').classList.add('opening');
+  document.getElementById('tap-hint').style.opacity = '0';
+
+  // 🌸 Launch flower confetti!
+  setTimeout(() => { launchConfetti(); }, 300);
+
+  // Small emoji burst (existing effect, kept)
+  for (let i = 0; i < 30; i++) {
+    setTimeout(() => {
+      const burst = document.createElement('div');
+      burst.style.cssText = `position:fixed;pointer-events:none;z-index:50;font-size:${Math.random()*1.5+1}rem;left:50%;top:50%;transform:translate(-50%,-50%);animation:burstOut 1.2s ease-out forwards;--tx:${(Math.random()-0.5)*300}px;--ty:${(Math.random()-0.5)*300}px;`;
+      burst.textContent = petalEmojis[Math.floor(Math.random()*petalEmojis.length)];
+      document.body.appendChild(burst); setTimeout(() => burst.remove(), 1500);
+    }, i * 40);
+  }
+
+  setTimeout(() => {
+    const ov = document.getElementById('transition-overlay');
+    ov.classList.add('flash');
+    setTimeout(() => { ov.classList.remove('flash'); document.getElementById('section-hero').scrollIntoView({ behavior: 'smooth' }); }, 600);
+  }, 1000);
+}
+
+/* ══════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════ */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+}, { threshold: 0, rootMargin: '0px 0px -5% 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ══════════════════════════════════
+   MUSIC PLAYER
+══════════════════════════════════ */
+const tracks = [
+  { title: 'shape of my heart',  artist: 'backstreet boys',  src: 'somh.mp3',    emoji: '🌹' },
+  { title: 'perfect',            artist: 'ed sheeran',   src: 'perfect.mp3', emoji: '🌸' },
+  { title: 'a thousand',         artist: 'christina perri',   src: 'ily.mp3',     emoji: '💖' },
+];
+
+const audio = document.getElementById('audio-player');
+let currentTrack = 0;
+let isPlaying = false;
+
+/**
+ * @param {number} idx
+ * @param {boolean} autoplay
+ */
+function loadTrack(idx, autoplay) {
+  const t = tracks[idx];
+  audio.src = t.src;
+  document.getElementById('player-title').textContent = t.title;
+  document.getElementById('player-artist').textContent = t.artist;
+  document.getElementById('player-cover').textContent = t.emoji;
+  document.getElementById('player-bar').style.width = '0%';
+  document.getElementById('player-loading').textContent = 'memuat lagu...';
+  audio.load();
+  if (autoplay) {
+    audio.play().then(() => {
+      isPlaying = true; updatePlayBtn();
+      document.getElementById('player-loading').textContent = '';
+      document.getElementById('player-cover').classList.add('playing');
+    }).catch(() => {
+      isPlaying = false; updatePlayBtn();
+      document.getElementById('player-loading').textContent = '▸ klik play untuk mulai';
+    });
+  } else {
+    document.getElementById('player-loading').textContent = '';
+  }
+}
+
+function updatePlayBtn() {
+  const icon = document.getElementById('play-icon');
+
+  if(isPlaying){
+    icon.setAttribute('icon','solar:pause-bold');
+  }else{
+    icon.setAttribute('icon','solar:play-bold');
+  }
+
+  document.getElementById('player-cover')
+    .classList.toggle('playing', isPlaying);
+}
+
+function togglePlay() {
+  if (audio.src === '' || audio.src === window.location.href) { loadTrack(currentTrack, true); return; }
+  if (isPlaying) { audio.pause(); isPlaying = false; }
+  else { audio.play().catch(() => {}); isPlaying = true; }
+  updatePlayBtn();
+  document.getElementById('player-loading').textContent = '';
+}
+
+function prevTrack() { currentTrack = (currentTrack - 1 + tracks.length) % tracks.length; loadTrack(currentTrack, isPlaying); }
+function nextTrack() { currentTrack = (currentTrack + 1) % tracks.length; loadTrack(currentTrack, isPlaying); }
+
+audio.addEventListener('timeupdate', () => {
+  if (audio.duration) document.getElementById('player-bar').style.width = (audio.currentTime / audio.duration * 100) + '%';
+});
+document.getElementById('progress-bar-wrap').addEventListener('click', (e) => {
+  if (!audio.duration) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+});
+audio.addEventListener('ended', () => { nextTrack(); });
+audio.addEventListener('error', () => { document.getElementById('player-loading').textContent = '⚠ file tidak ditemukan'; isPlaying = false; updatePlayBtn(); });
+audio.addEventListener('canplay', () => { document.getElementById('player-loading').textContent = ''; });
+window.addEventListener('load', () => { if (tracks.length > 0) loadTrack(0, true); });
+</script>
+</body>
+</html>
